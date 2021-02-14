@@ -123,6 +123,7 @@ void            yield(void);
 
 //* Start of my system calls*//
 void            exitS(int);
+void            waitpid(int,int*,int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
