@@ -26,7 +26,7 @@ int uptime(void);
 
 //*Start of my system calls*//
 int exitS(int);
-int waitpid(int,int*,int)
+int waitpid(int,int*,int);
 
 // ulib.c
 int stat(const char*, struct stat*);
