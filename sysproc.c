@@ -21,7 +21,7 @@ sys_exit(void)
 }
 int sys_exitS(void)//new call
 {
-  exitS();
+  exitS(0);
   return 0;
 }
 

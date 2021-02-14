@@ -305,7 +305,7 @@ exitS(int status) //* Start of exitS *// copy of exit()
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
-  printf(status, "Process exiting with status %d\n"
+ // printf(status, "Process exiting with status %d\n"
   sched();
   panic("zombie exit");
 }
