@@ -19,6 +19,11 @@ sys_exit(void)
   exit();
   return 0;  // not reached
 }
+int sys_exitS(void)//new call
+{
+  exitS();
+  return 0;
+}
 
 int
 sys_wait(void)

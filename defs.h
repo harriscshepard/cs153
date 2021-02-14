@@ -121,6 +121,9 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 
+//* Start of my system calls*//
+void            exitS(void);
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 
