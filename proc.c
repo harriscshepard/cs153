@@ -267,7 +267,7 @@ exit(void)
   panic("zombie exit");
 }
 void
-exitS(void) //* Start of exitS *// copy of exit()
+exitS(int status) //* Start of exitS *// copy of exit()
 {
   struct proc *curproc = myproc();
   struct proc *p;

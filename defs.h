@@ -122,7 +122,7 @@ void            wakeup(void*);
 void            yield(void);
 
 //* Start of my system calls*//
-void            exitS(void);
+void            exitS(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
