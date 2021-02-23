@@ -266,7 +266,7 @@ exit(void)
   sched();
   panic("zombie exit");
 }
-void
+int
 exitS(int status) //* Start of exitS *// copy of exit()
 {
   struct proc *curproc = myproc();
@@ -305,9 +305,11 @@ exitS(int status) //* Start of exitS *// copy of exit()
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
+  curproc->status = status;
  // printf(status, "Process exiting with status %d\n"
   sched();
   panic("zombie exit");
+  return status;
 }
 
 // Wait for a child process to exit and return its pid.
@@ -411,7 +413,7 @@ waitpid(int spec_pid,int * status, int options)
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
 void
-scheduler(void)
+schedulerRoundRobin(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
@@ -444,6 +446,61 @@ scheduler(void)
     release(&ptable.lock);
 
   }
+}
+void
+scheduler(void) //priority scheduler
+{
+  struct proc *p;
+  struct cpu *c = mycpu();
+  c->proc = 0;
+  struct proc *p_highest_priority;
+  int highest_priority;
+  int cur_proc_priority;
+  
+  for(;;){
+    // Enable interrupts on this processor.
+    sti();
+    p_highest_priority = ptable.proc;
+    highest_priority = p_highest_priority->priority; //highest priority
+
+    // Loop over process table looking for process to run.
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->state != RUNNABLE)
+        continue;
+
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+      cur_proc_priority = p->priority;
+      if(cur_proc_priority < highest_priority)
+      {
+        highest_priority = cur_proc_priority;
+        p_highest_priority = p;
+      }
+
+     
+    }
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
+
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
+
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+    release(&ptable.lock);
+
+
+  }
+}
+int
+setpriority(int pr)
+{
+  myproc()->priority = pr;
+  return pr;
 }
 
 // Enter scheduler.  Must hold only ptable.lock

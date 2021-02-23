@@ -120,9 +120,10 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+int             setpriority(int);
 
 //* Start of my system calls*//
-void            exitS(int);
+int            exitS(int);
 int           waitpid(int,int*,int);
 
 // swtch.S

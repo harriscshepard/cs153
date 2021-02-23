@@ -21,8 +21,21 @@ sys_exit(void)
 }
 int sys_exitS(void)//new call
 {
-  exitS(0);
-  return 0;
+  int s;
+  if(argint(0,&s)<0)
+    return -1;
+  return exitS(s);
+}
+
+int
+sys_setpriority(void)
+{
+  int pr;
+  if(argint(0,&pr)<0)
+  {
+    pr = 0;
+  }
+  return setpriority(pr);
 }
 
 int
